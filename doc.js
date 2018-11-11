@@ -29,7 +29,6 @@ else {
   }
 
 
-// TODO sort by value length
 // Create inputs on the modal
 function modal() {
   $(".modal-body br").remove();
@@ -72,9 +71,6 @@ function setUp() {
 // function to sort array by string length
 function sortByLength(a, b)
 {
-    // a and b will here be two objects from the array
-    // thus a[1] and b[1] will equal the names
-
     // if they are equal, return 0 (no sorting)
     if (a.length == b.length) { return 0; }
     if (a.length > b.length)

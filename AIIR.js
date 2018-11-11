@@ -24,25 +24,26 @@ function checkCombinaisons(attributs, lastIndex, rank) {
 function compute() {
   var weightObject = {};
   var newComputedArray = {};
+  // On crée newComputedArray pour pour y stocker les nouveaux poids
   for (var key in computedArray) {
-    // skip loop if the property is from prototype
     if (!computedArray.hasOwnProperty(key)) continue;
 
     weightObject[key] = parseFloat(document.forms['test'][key].value);
     newComputedArray[key] = 0;
   }
-  console.log(weightObject);
   var matrice = {};
 
   for (var weightKey in weightObject) {
-    var obj = {};
     if (!weightObject.hasOwnProperty(weightKey)) continue;
+    var obj2 = {};
     for (var computedKey in computedArray) {
       if (!computedArray.hasOwnProperty(computedKey)) continue;
-      obj[computedKey] = computedArray[computedKey] * weightObject[weightKey];
-      matrice[weightKey] = obj;
-
+      var obj = {};
+      obj['value'] = computedArray[computedKey] * weightObject[weightKey];
+      obj['void'] = true;
+      obj2[computedKey] = obj;
     }
+    matrice[weightKey] = obj2;
   }
 
   console.log(matrice);
@@ -82,14 +83,22 @@ function compute() {
         if (rank1 != rank0 && rank2 != rank0 && rank1 - rank2 != 0) continue;
         if (arraysEqual(composition[opinionKey], composition[weightKey]) && !arraysEqual(composition[key], composition[weightKey])) continue;
         // TODO dernière conditions
-        newComputedArray[key] += matrice[weightKey][opinionKey];
-        if (key === 'H1') console.log(weightKey, opinionKey);
+        newComputedArray[key] += matrice[weightKey][opinionKey]['value'];
+        matrice[weightKey][opinionKey]['void'] = false;
       }
 
     }
   }
-
-  console.log(newComputedArray);
+  /*newComputedArray['vide'] = 0;
+  for (var opinionKey in computedArray) {
+    if (!computedArray.hasOwnProperty(opinionKey)) continue;
+    for (var weightKey in weightObject) {
+      if (!weightObject.hasOwnProperty(weightKey)) continue;
+      if (matrice[weightKey][opinionKey]['void'] == true) {
+        newComputedArray['vide'] += matrice[weightKey][opinionKey]['value'];
+      }
+    }
+  }*/
   computedArray = newComputedArray;
 
   //TO DO : faire le vide;
