@@ -89,7 +89,7 @@ function compute() {
 
     }
   }
-  /*newComputedArray['vide'] = 0;
+  newComputedArray['vide'] = 0;
   for (var opinionKey in computedArray) {
     if (!computedArray.hasOwnProperty(opinionKey)) continue;
     for (var weightKey in weightObject) {
@@ -98,7 +98,7 @@ function compute() {
         newComputedArray['vide'] += matrice[weightKey][opinionKey]['value'];
       }
     }
-  }*/
+  }
   computedArray = newComputedArray;
 
   //TO DO : faire le vide;
