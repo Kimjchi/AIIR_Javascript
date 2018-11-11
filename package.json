@@ -1,0 +1,23 @@
+{
+  "name": "aiir",
+  "version": "1.0.0",
+  "description": "",
+  "main": "AIIR.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kimjchi/AIIR_Javascript.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kimjchi/AIIR_Javascript/issues"
+  },
+  "homepage": "https://github.com/Kimjchi/AIIR_Javascript#readme",
+  "devDependencies": {
+    "browser-sync": "^2.26.3",
+    "gulp": "^3.9.1"
+  }
+}
