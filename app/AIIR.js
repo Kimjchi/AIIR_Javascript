@@ -123,7 +123,12 @@ function createNewAttribute() {
 
 // Normalisation après calcul de matrice
 function normalisation() {
-  
+  var vide = computedArray['vide'];
+  for (var opinionKey in computedArray) {
+    if (!computedArray.hasOwnProperty(opinionKey) || opinionKey == 'vide') continue;
+    computedArray[opinionKey] = computedArray[opinionKey] / (1 - vide);
+  }
+  computedArray['vide'] = 0;
 }
 
 // Check if 2 arrays are equal
