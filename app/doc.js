@@ -55,16 +55,13 @@ function save() {
 // Create a form for the keys and a list
 function setUp() {
   $("li").remove();
+  $("#form br").remove();
   $("#form label").remove();
   $("#form input").remove();
 
-  for (var key in opinion) {
-    // skip loop if the property is from prototype
-    if (!opinion.hasOwnProperty(key)) continue;
-
-    var obj = opinion[key];
-    $(".attributs").append("<li id=\""+ key + "\">" + key + " : " + obj + "</li>");
-    $("#form").append("<label>" + key + "</label><input type=\"text\" placeholder=\"0\" name=\"" + key + "\">");
+  for (var i = 0 ; i < keysArray.length ; i++) {
+    $(".attributs").append("<li id=\""+ keysArray[i] + "\">" + keysArray[i] + " : " + opinion[keysArray[i]] + "</li>");
+    $("#form").append("</br><label>" + keysArray[i] + "</label><input type=\"text\" placeholder=\"0\" name=\"" + keysArray[i] + "\">");
   }
 }
 
