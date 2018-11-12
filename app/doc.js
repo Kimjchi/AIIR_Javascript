@@ -43,7 +43,7 @@ function modal() {
 // Save values of input and decompose keys into unique attribute
 function save() {
   for (var i = 0 ; i < keysArray.length ; i++) {
-    computedArray[keysArray[i]] = parseFloat($(".modal-body input[name=\"" + keysArray[i] + "\"]").val());
+    opinion[keysArray[i]] = parseFloat($(".modal-body input[name=\"" + keysArray[i] + "\"]").val());
     composition[keysArray[i]] = keysArray[i].split(' and ');
   }
   attributeArray.push($('#form1').find('input[name="attribut_name"]').val());
@@ -58,11 +58,11 @@ function setUp() {
   $("#form label").remove();
   $("#form input").remove();
 
-  for (var key in computedArray) {
+  for (var key in opinion) {
     // skip loop if the property is from prototype
-    if (!computedArray.hasOwnProperty(key)) continue;
+    if (!opinion.hasOwnProperty(key)) continue;
 
-    var obj = computedArray[key];
+    var obj = opinion[key];
     $(".attributs").append("<li id=\""+ key + "\">" + key + " : " + obj + "</li>");
     $("#form").append("<label>" + key + "</label><input type=\"text\" placeholder=\"0\" name=\"" + key + "\">");
   }

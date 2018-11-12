@@ -2,7 +2,7 @@ var composition = {} // Combinaisons d'attributs avec leur attribut
 var attributeArray = []; // Tous les attribus simples sauf vide
 var keysArray = []; // Combinaisons des attributs et vide
 
-var computedArray = {}; // Combinaisons des attributs et leur poids
+var opinion = {}; // Combinaisons des attributs et leur poids
 
 var set = new Set(); // Combinaisons des attributs uniques
 
@@ -20,89 +20,84 @@ function checkCombinaisons(attributs, lastIndex, rank) {
   }
 }
 
-// TODO factoriser
 function compute() {
   var weightObject = {};
-  var newComputedArray = {};
-  // On crée newComputedArray pour pour y stocker les nouveaux poids
-  for (var key in computedArray) {
-    if (!computedArray.hasOwnProperty(key)) continue;
+  var newOpinion = {};
 
-    weightObject[key] = parseFloat(document.forms['test'][key].value);
-    newComputedArray[key] = 0;
+  // On crée newOpinion pour pour y stocker les nouveaux poids
+  for (var key in opinion) {
+    if (!opinion.hasOwnProperty(key)) continue;
+
+    weightObject[key] = parseFloat(document.forms['quete'][key].value);
+    newOpinion[key] = 0;
   }
   var matrice = {};
 
   for (var weightKey in weightObject) {
     if (!weightObject.hasOwnProperty(weightKey)) continue;
     var obj2 = {};
-    for (var computedKey in computedArray) {
-      if (!computedArray.hasOwnProperty(computedKey)) continue;
+    for (var computedKey in opinion) {
+      if (!opinion.hasOwnProperty(computedKey)) continue;
       var obj = {};
-      obj['value'] = computedArray[computedKey] * weightObject[weightKey];
+      obj['value'] = opinion[computedKey] * weightObject[weightKey];
       obj['void'] = true;
       obj2[computedKey] = obj;
     }
     matrice[weightKey] = obj2;
   }
 
-  console.log(matrice);
-
-  for (var key in newComputedArray) {
-    if (!newComputedArray.hasOwnProperty(key)) continue;
+  for (var key in newOpinion) {
+    if (!newOpinion.hasOwnProperty(key)) continue;
     var compositionOfKey = composition[key];
     var rank0 = compositionOfKey.length;
 
-    for (var opinionKey in computedArray) {
-      if (!computedArray.hasOwnProperty(opinionKey)) continue;
+    for (var opinionKey in opinion) {
+      if (!opinion.hasOwnProperty(opinionKey)) continue;
       var rank1 = composition[opinionKey].length;
       if (rank1 < rank0) continue;
-      var included = true;
-      for (var i = 0 ; i < rank0 ; i++) {
-        if (!composition[opinionKey].includes(compositionOfKey[i])) {
-          included = false;
-          break;
-        }
-      }
 
-      if (!included) continue;
+      if (!include(compositionOfKey, opinionKey)) continue;
 
       for (var weightKey in weightObject) {
         if (!weightObject.hasOwnProperty(weightKey)) continue;
         var rank2 = composition[weightKey].length;
         if (rank2 < rank0) continue;
-        var included2 = true;
-        for (var i = 0 ; i < rank0 ; i++) {
-          if (!composition[weightKey].includes(compositionOfKey[i])) {
-            included2 = false;
-            break;
-          }
-        }
 
-        if (!included2) continue;
+        if (!include(compositionOfKey, weightKey)) continue;
+
         if (rank1 != rank0 && rank2 != rank0 && rank1 - rank2 != 0) continue;
         if (arraysEqual(composition[opinionKey], composition[weightKey]) && !arraysEqual(composition[key], composition[weightKey])) continue;
-        // TODO dernière conditions
-        newComputedArray[key] += matrice[weightKey][opinionKey]['value'];
+
+        newOpinion[key] += matrice[weightKey][opinionKey]['value'];
         matrice[weightKey][opinionKey]['void'] = false;
       }
 
     }
   }
-  newComputedArray['vide'] = 0;
-  for (var opinionKey in computedArray) {
-    if (!computedArray.hasOwnProperty(opinionKey)) continue;
+
+  // Calcul du vide
+  newOpinion['vide'] = 0;
+  for (var opinionKey in opinion) {
+    if (!opinion.hasOwnProperty(opinionKey)) continue;
     for (var weightKey in weightObject) {
       if (!weightObject.hasOwnProperty(weightKey)) continue;
       if (matrice[weightKey][opinionKey]['void'] == true) {
-        newComputedArray['vide'] += matrice[weightKey][opinionKey]['value'];
+        newOpinion['vide'] += matrice[weightKey][opinionKey]['value'];
       }
     }
   }
-  computedArray = newComputedArray;
+  opinion = newOpinion;
 
   normalisation();
-  setUp();
+  setUp(); // Change les valeurs dans le HTML
+}
+
+// Check si le ou les attributs recherché(s) est contenu dans cette partie de la matrice
+function include(compositionOfKey, key) {
+  for (var i = 0 ; i < compositionOfKey.length ; i++) {
+    if (!composition[key].includes(compositionOfKey[i])) return false;
+  }
+  return true;
 }
 
 // Create a new attribute and check combinaisons of attributes with previous ones
@@ -123,12 +118,12 @@ function createNewAttribute() {
 
 // Normalisation après calcul de matrice
 function normalisation() {
-  var vide = computedArray['vide'];
-  for (var opinionKey in computedArray) {
-    if (!computedArray.hasOwnProperty(opinionKey) || opinionKey == 'vide') continue;
-    computedArray[opinionKey] = computedArray[opinionKey] / (1 - vide);
+  var vide = opinion['vide'];
+  for (var opinionKey in opinion) {
+    if (!opinion.hasOwnProperty(opinionKey) || opinionKey == 'vide') continue;
+    opinion[opinionKey] = opinion[opinionKey] / (1 - vide);
   }
-  computedArray['vide'] = 0;
+  opinion['vide'] = 0;
 }
 
 // Check if 2 arrays are equal
